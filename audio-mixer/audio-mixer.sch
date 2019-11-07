@@ -1,4 +1,5 @@
 EESchema Schematic File Version 4
+LIBS:audio-mixer-cache
 EELAYER 30 0
 EELAYER END
 $Descr A4 11693 8268
@@ -48,33 +49,33 @@ $EndComp
 $Comp
 L PJRAS4X2U01X:PJRAS4X2U01X J1
 U 3 1 5DC3A8D4
-P 1300 2700
-F 0 "J1" H 1300 2700 50  0001 L BNN
-F 1 "PJRAS4X2U01X" H 1300 2700 50  0001 L BNN
-F 2 "PJRAS4X2U01X" H 1300 2700 50  0001 L BNN
-F 3 "None" H 1300 2700 50  0001 L BNN
-F 4 "Switchcraft Inc." H 1300 2700 50  0001 L BNN "Field4"
-F 5 "Unavailable" H 1300 2700 50  0001 L BNN "Field5"
-F 6 "None" H 1300 2700 50  0001 L BNN "Field6"
-F 7 "PJRAS4X2U01X" H 1300 2700 50  0001 L BNN "Field7"
-F 8 "Conn Phono Jack F 8 7.5mm Solder RA Thru-Hole 8 Terminal 8 Port" H 1300 2700 50  0001 L BNN "Field8"
-	3    1300 2700
+P 1300 2850
+F 0 "J1" H 1300 2850 50  0001 L BNN
+F 1 "PJRAS4X2U01X" H 1300 2850 50  0001 L BNN
+F 2 "PJRAS4X2U01X" H 1300 2850 50  0001 L BNN
+F 3 "None" H 1300 2850 50  0001 L BNN
+F 4 "Switchcraft Inc." H 1300 2850 50  0001 L BNN "Field4"
+F 5 "Unavailable" H 1300 2850 50  0001 L BNN "Field5"
+F 6 "None" H 1300 2850 50  0001 L BNN "Field6"
+F 7 "PJRAS4X2U01X" H 1300 2850 50  0001 L BNN "Field7"
+F 8 "Conn Phono Jack F 8 7.5mm Solder RA Thru-Hole 8 Terminal 8 Port" H 1300 2850 50  0001 L BNN "Field8"
+	3    1300 2850
 	1    0    0    -1  
 $EndComp
 $Comp
 L PJRAS4X2U01X:PJRAS4X2U01X J1
 U 4 1 5DC3C23F
-P 1300 3450
-F 0 "J1" H 1300 3450 50  0001 L BNN
-F 1 "PJRAS4X2U01X" H 1300 3450 50  0001 L BNN
-F 2 "PJRAS4X2U01X" H 1300 3450 50  0001 L BNN
-F 3 "None" H 1300 3450 50  0001 L BNN
-F 4 "Switchcraft Inc." H 1300 3450 50  0001 L BNN "Field4"
-F 5 "Unavailable" H 1300 3450 50  0001 L BNN "Field5"
-F 6 "None" H 1300 3450 50  0001 L BNN "Field6"
-F 7 "PJRAS4X2U01X" H 1300 3450 50  0001 L BNN "Field7"
-F 8 "Conn Phono Jack F 8 7.5mm Solder RA Thru-Hole 8 Terminal 8 Port" H 1300 3450 50  0001 L BNN "Field8"
-	4    1300 3450
+P 1300 3600
+F 0 "J1" H 1300 3600 50  0001 L BNN
+F 1 "PJRAS4X2U01X" H 1300 3600 50  0001 L BNN
+F 2 "PJRAS4X2U01X" H 1300 3600 50  0001 L BNN
+F 3 "None" H 1300 3600 50  0001 L BNN
+F 4 "Switchcraft Inc." H 1300 3600 50  0001 L BNN "Field4"
+F 5 "Unavailable" H 1300 3600 50  0001 L BNN "Field5"
+F 6 "None" H 1300 3600 50  0001 L BNN "Field6"
+F 7 "PJRAS4X2U01X" H 1300 3600 50  0001 L BNN "Field7"
+F 8 "Conn Phono Jack F 8 7.5mm Solder RA Thru-Hole 8 Terminal 8 Port" H 1300 3600 50  0001 L BNN "Field8"
+	4    1300 3600
 	1    0    0    -1  
 $EndComp
 $Comp
@@ -160,18 +161,18 @@ $EndComp
 $Comp
 L RCJ-2234:RCJ-2234 J3
 U 1 1 5DC426F4
-P 10200 1500
-F 0 "J3" H 10200 1500 50  0001 L BNN
-F 1 "RCJ-2234" H 10200 1500 50  0001 L BNN
-F 2 "RCJ-2221" H 10200 1500 50  0001 L BNN
-F 3 "Unavailable" H 10200 1500 50  0001 L BNN
-F 4 "None" H 10200 1500 50  0001 L BNN "Field4"
-F 5 "None" H 10200 1500 50  0001 L BNN "Field5"
-F 6 "RCJ-2234" H 10200 1500 50  0001 L BNN "Field6"
-F 7 "https://www.cuidevices.com/product/interconnect/connectors/rca-connectors/rcj-22-series?utm_source=snapeda.com&utm_medium=referral&utm_campaign=snapedaBOM" H 10200 1500 50  0001 L BNN "Field7"
-F 8 "2-Port, Right-Angle, RCA Jack, Vertical" H 10200 1500 50  0001 L BNN "Field8"
-F 9 "CUI Devices" H 10200 1500 50  0001 L BNN "Field9"
-	1    10200 1500
+P 1250 4400
+F 0 "J3" H 1250 4400 50  0001 L BNN
+F 1 "RCJ-2234" H 1250 4400 50  0001 L BNN
+F 2 "RCJ-2221" H 1250 4400 50  0001 L BNN
+F 3 "Unavailable" H 1250 4400 50  0001 L BNN
+F 4 "None" H 1250 4400 50  0001 L BNN "Field4"
+F 5 "None" H 1250 4400 50  0001 L BNN "Field5"
+F 6 "RCJ-2234" H 1250 4400 50  0001 L BNN "Field6"
+F 7 "https://www.cuidevices.com/product/interconnect/connectors/rca-connectors/rcj-22-series?utm_source=snapeda.com&utm_medium=referral&utm_campaign=snapedaBOM" H 1250 4400 50  0001 L BNN "Field7"
+F 8 "2-Port, Right-Angle, RCA Jack, Vertical" H 1250 4400 50  0001 L BNN "Field8"
+F 9 "CUI Devices" H 1250 4400 50  0001 L BNN "Field9"
+	1    1250 4400
 	1    0    0    -1  
 $EndComp
 $Comp
@@ -215,23 +216,23 @@ $EndComp
 $Comp
 L power:GND #PWR07
 U 1 1 5DC49781
-P 1800 2950
-F 0 "#PWR07" H 1800 2700 50  0001 C CNN
-F 1 "GND" H 1805 2777 50  0000 C CNN
-F 2 "" H 1800 2950 50  0001 C CNN
-F 3 "" H 1800 2950 50  0001 C CNN
-	1    1800 2950
+P 1800 3100
+F 0 "#PWR07" H 1800 2850 50  0001 C CNN
+F 1 "GND" H 1805 2927 50  0000 C CNN
+F 2 "" H 1800 3100 50  0001 C CNN
+F 3 "" H 1800 3100 50  0001 C CNN
+	1    1800 3100
 	1    0    0    -1  
 $EndComp
 $Comp
 L power:GND #PWR08
 U 1 1 5DC49D21
-P 1800 3700
-F 0 "#PWR08" H 1800 3450 50  0001 C CNN
-F 1 "GND" H 1805 3527 50  0000 C CNN
-F 2 "" H 1800 3700 50  0001 C CNN
-F 3 "" H 1800 3700 50  0001 C CNN
-	1    1800 3700
+P 1800 3850
+F 0 "#PWR08" H 1800 3600 50  0001 C CNN
+F 1 "GND" H 1805 3677 50  0000 C CNN
+F 2 "" H 1800 3850 50  0001 C CNN
+F 3 "" H 1800 3850 50  0001 C CNN
+	1    1800 3850
 	1    0    0    -1  
 $EndComp
 $Comp
@@ -270,12 +271,12 @@ $EndComp
 $Comp
 L power:GND #PWR022
 U 1 1 5DC4CECF
-P 9950 1800
-F 0 "#PWR022" H 9950 1550 50  0001 C CNN
-F 1 "GND" H 9955 1627 50  0000 C CNN
-F 2 "" H 9950 1800 50  0001 C CNN
-F 3 "" H 9950 1800 50  0001 C CNN
-	1    9950 1800
+P 1000 4650
+F 0 "#PWR022" H 1000 4400 50  0001 C CNN
+F 1 "GND" H 1005 4477 50  0000 C CNN
+F 2 "" H 1000 4650 50  0001 C CNN
+F 3 "" H 1000 4650 50  0001 C CNN
+	1    1000 4650
 	1    0    0    -1  
 $EndComp
 $Comp
@@ -297,17 +298,17 @@ Text GLabel 1800 1700 2    50   Input ~ 0
 INPUT2B
 Text GLabel 1800 2000 2    50   Input ~ 0
 INPUT2A
-Text GLabel 1800 2450 2    50   Input ~ 0
+Text GLabel 1800 2600 2    50   Input ~ 0
 INPUT3B
-Text GLabel 1800 2750 2    50   Input ~ 0
+Text GLabel 1800 2900 2    50   Input ~ 0
 INPUT3A
-Text GLabel 1800 3200 2    50   Input ~ 0
+Text GLabel 1800 3350 2    50   Input ~ 0
 INPUT4B
-Text GLabel 1800 3500 2    50   Input ~ 0
+Text GLabel 1800 3650 2    50   Input ~ 0
 INPUT4A
-Text GLabel 10750 1400 2    50   Input ~ 0
+Text GLabel 1800 4300 2    50   Input ~ 0
 OUTPUT1B
-Text GLabel 10750 1550 2    50   Input ~ 0
+Text GLabel 1800 4450 2    50   Input ~ 0
 OUTPUT1A
 $Comp
 L power:+12V #PWR09
@@ -588,10 +589,10 @@ F 8 "TDK" H 1200 6700 50  0001 L BNN "Field8"
 $EndComp
 Connection ~ 1500 6700
 $Comp
-L power:VCC #PWR?
+L power:VCC #PWR028
 U 1 1 5DC90277
 P 1050 5300
-F 0 "#PWR?" H 1050 5150 50  0001 C CNN
+F 0 "#PWR028" H 1050 5150 50  0001 C CNN
 F 1 "VCC" H 1067 5473 50  0000 C CNN
 F 2 "" H 1050 5300 50  0001 C CNN
 F 3 "" H 1050 5300 50  0001 C CNN

@@ -440,8 +440,7 @@ This is the result that I came up with. Note that the first capacitor, C1 in Fig
 
 After having done the research on the parts that I will use, the next step is to create a BOM list that helps me understand and break down the cost of the product so far, and helps me find out what I need to source. A lot of parts have multiple possible sources.
 
-\begin{table}[h!]
-\centering
+\begin{center}
 \begin{tabular}{@{}lllll@{}}
 \toprule
 Part & Description & Count & Unit Price (€) & Price (€)\\
@@ -457,12 +456,21 @@ P2J4103-ND & Potentiometer & 5 & 1.19 & 5.95\\
 Total & & 14 && 20.38\\
 \bottomrule
 \end{tabular}
-\end{table}
+\end{center}
 
 My calculations show that the product will cost about 25€ in parts. There is obviously more cost for me, because this does not include shipping. At this time, it also does not include the cost of the case. However, I am happy with that price so far. 
 
+\section{Layout of PCB and Routing}
 
+After I have the schematics and all parts set, I proceeded to do the actual PCB. At first, I just imported all of the parts from the schematic. Then, I placed some rulers to measure a 100 by 50mm square area that would be the size of my PCB. Next, I drew the outlines of this area on the Edge.Cut layer.
 
+Next, I arranged the parts on the PCB in a way that makes sense. The RCA jacks and USB Power Input all went on the same long edge. I spread out the components a bit, such that they were all placed with space around them for laying out connections.
+
+\begin{center}
+  \includegraphics[trim={11cm 5cm 12cm 5cm},clip,width=6cm]{images/pcb.pdf}
+\end{center}
+
+I was still missing some outlines and some parts. 
 
 
 \end{document}
