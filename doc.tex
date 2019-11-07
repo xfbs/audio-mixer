@@ -386,6 +386,23 @@ The USB Power Input side was quite straightforward. I used the part for the USB 
 
 I might get back to this and add a fuse for protection, although I'm not sure yet if that is really necessary.
 
+\subsection{Audio Input and Output}
+
+For the audio inputs (RCA Jacks), I simply added all eight (four stereo channels) of them. I attached their ground to the common ground, and created labels for every one of them.
+
+\begin{center}
+  \includegraphics[trim={2cm 14.7cm 24cm 2cm},width=4cm,clip]{images/audio-mixer.pdf}
+  \includegraphics[trim={2cm 10.5cm 24cm 6.2cm},width=4cm,clip]{images/audio-mixer.pdf}
+\end{center}
+
+Likewise, I created an instance of the output jack in the schematic and set it up with the proper ground and labels.
+
+\begin{center}
+  \includegraphics[trim={2cm 8.5cm 24cm 10.4cm},width=4cm,clip]{images/audio-mixer.pdf}
+\end{center}
+
+I have found the labels feature to be quite useful to prevent having to route excessive amounts of wires in the schematic, it helps keep things clean.
+
 \subsection{DC to DC Power}
 
 Next I designed the DC to DC Power stage. In this stage, I need to convert the ~5V from the USB into a ±9V or ±12V power rail used by the opamps. The reason I want a range like this is that the opamps will be used to make voltage followers, so they need to have a power rail that is in the range of the signal (which is ±2V line level). It is always good to leave a bit of a margin just to be sure. Also, the opamps don't work too great too close to the rails.
@@ -413,6 +430,11 @@ The sample circuits are a little confusing, but I just implemented both of them 
 \end{center}
 
 This is the result that I came up with. Note that the first capacitor, C1 in Figure \ref{fig:pdme-emc}, is not visible -- this can be seen on the USB Power Input side of things. I have labelled the two new power rails +12V and -12V, to differentiate from the existing V\textsubscript{cc} and GND rails.
+
+\subsection{Audio Volume Adjustment}
+
+\subsection{Audio Mixing}
+
 
 \section{Bill of Materials}
 
