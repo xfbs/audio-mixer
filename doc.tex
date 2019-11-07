@@ -298,29 +298,146 @@ The second one I found is even more expensive -- at least when buying a single o
 
 Just to know what that is all about, I also took a look at some digital potentiometers. The first one that I found looks really good at first glance -- especially the price looks good. However, upon further thinking, I realised that it is linear. It is possible to fake a logarithmic scale with a linear digital potentiometer, but that means that it would be limited to 7 audio positions, which doesn't sound all that great.
 
+\begin{partdisplay}{175-16-QSOP}
+& Digikey Part & MAX5456EEE+-ND\\
+& Manufacturer & Maxim Integrated\\
+& Manufacturer Part & MAX5456EEE+\\
+& Resistance & 10k\\
+& Type & Logarithmic\\
+& Positions & 32\\
+& Potentiometers & 2\\
+& Interface & UP/DOWN Pins\\
+& Price (1) & 3.05€\\
+& Price (10) & 2.74€\\
+\end{partdisplay}
+
+Lastly, I found a chip that would actually work as a digital potentiometer. It is quite expensive, far more than the physical potentiometers, at 3€ per stereo channel. It would undoubtedly be fun to play with this and a microcontroller -- but it is out of the price range at this point.
+
 \subsection{Capacitors}
 
 As this deals with audio things, I need to make sure to use plenty good capacitors, as any type of noise will be noticeable. The datasheets of the components I use prescribe what kind of filter capacitors I need.
 
+\begin{partdisplay}{nichion47cap}
+& Digikey Part & 493-1808-ND\\
+& Manufacturer & Nichicon\\
+& Manufacturer Part & UPW1E4R7MDD\\
+& Type & Electrolytic\\
+& Capacity & 4.7µF\\
+& Price (1) & 0.21€\\
+& Price (10) & 0.14€\\  
+\end{partdisplay}
+
+The first cap I found is the one I will use for the filter caps on the input stage of the DC to DC transformer. It's surprisingly expensive to buy caps on digikey, normally they should be a couple cents a pop at most. All of this stuff adds to the BOM cost, which is a bit concerning.
+
+\begin{partdisplay}{samsung8050}
+& Digikey Part & 1276-1066-1-ND\\
+& Manufacturer & Samsung Electro-Mechanics\\
+& Manufacturer Part & CL21B105KAFNNNE\\
+& Type & Electrolytic\\
+& Capacity & 1µF\\
+& Price (1) & 0.10€\\
+& Price (10) & 0.07€\\  
+\end{partdisplay}
+
+The next cap I found is a ceramic cap. This is for power smoothing on the output of the DC to DC converter.
+
+\begin{partdisplay}{samsung8050}
+& Digikey Part & 1276-1014-1-ND\\
+& Manufacturer & Samsung Electro-Mechanics\\
+& Manufacturer Part & CL21C101JBANNNC\\
+& Type & Electrolytic\\
+& Capacity & 100pF\\
+& Price (1) & 0.09€\\
+& Price (10) & 0.05€\\  
+\end{partdisplay}
+
+\subsection{Inductors}
+
+Since the datasheet of the DC to DC converter calls for an inductor on the input side, I looked for inductors. 
+
+\begin{partdisplay}{MFG_MLZ2012}
+& Digikey Part & 445-6402-1-ND\\
+& Manufacturer & TDK Corporation\\
+& Manufacturer Part & MLZ2012M6R8WT000\\
+& Inductance & 6.8µH\\
+& Current & 350mA\\
+& Sat. Current & 220mA\\
+& Price (1) & 0.13€\\
+& Price (10) & 0.11€\\
+\end{partdisplay}
+
+This inductor is the first one I found. It has an acceptable price, so I went with it.
+
 \subsection{Resistors}
+
+I will likely also need a bunch of resistors -- however, I am not listing these here, as they are cheap enough that I don't need to worry about sourcing them.
+
+\section{Design}
+
+Next, I start my actual design process. I have downloaded and installed the most up-to-date version of KiCad on my system, which I will use to design this product. I have also made an account over at SnapEDA in order to access their free parts database. I start out with downloading all the parts I'm using or considering and import them into KiCad. I also downloaded and installed the Digikey library, but I was unable to find a lot of the parts I needed in it.
+
+\subsection{USB Power Input}
+
+The USB Power Input side was quite straightforward. I used the part
+
+\begin{center}
+  \includegraphics[trim={2cm 5.5cm 21cm 12.8cm},width=8cm,clip]{images/audio-mixer.pdf}
+\end{center}
+
+\subsection{DC to DC Power}
+
+Next I designed the DC to DC Power stage. In this stage, I need to convert the ~5V from the USB into a ±9V or ±12V power rail used by the opamps. The reason I want a range like this is that the opamps will be used to make voltage followers, so they need to have a power rail that is in the range of the signal (which is ±2V line level). It is always good to leave a bit of a margin just to be sure. Also, the opamps don't work too great too close to the rails.
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=6cm]{images/pdme-dual}
+\caption{DC to DC converter dual rail setup}
+\label{fig:pdme-dual}
+\end{figure}
+
+I first looked at the datasheet provided by the DC to DC converter, which has recommendation on how to use it in a circuit. Figure \ref{fig:pdme-dual} and \ref{fig:pdme-emc} show how the datasheet recommends setting it up, and this is what I followed.
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=7cm]{images/pdme-emc}
+\caption{DC to DC converter EMC recommendation}
+\label{fig:pdme-emc}
+\end{figure}
+
+The sample circuits are a little confusing, but I just implemented both of them as I thought it makes sense. I did omit CY from Figure \ref{fig:pdme-emc} -- the device supports isolated outputs, but I chose to hook the output up to the ground, making the capacitor there redundant.
+
+\begin{center}
+  \includegraphics[trim={2cm 1.5cm 21cm 16cm},width=8cm,clip]{images/audio-mixer.pdf}
+\end{center}
+
+This is the result that I came up with. Note that the first capacitor, C1 in Figure \ref{fig:pdme-emc}, is not visible -- this can be seen on the USB Power Input side of things. I have labelled the two new power rails +12V and -12V, to differentiate from the existing V\textsubscript{cc} and GND rails.
 
 \section{Bill of Materials}
 
+After having done the research on the parts that I will use, the next step is to create a BOM list that helps me understand and break down the cost of the product so far, and helps me find out what I need to source. A lot of parts have multiple possible sources.
+
 \begin{table}[h!]
 \centering
-\begin{tabular}{@{}llll@{}}
+\begin{tabular}{@{}lllll@{}}
 \toprule
-Name & Description & Count & Price\\
+Part & Description & Count & Unit Price (€) & Price (€)\\
 \midrule
-LF353DR & Opamp & 5 & 0.25€\\
+SC1537-ND & 8 RCA Jacks & 1 & 3.79 & 3.97\\
+102-5864-ND & 2 RCA Jacks & 1 & 1.08 & 1.08\\
+497-1597-1-ND & Opamp & 5 & 0.37 & 1.85\\
+609-4616-1-ND & Micro USB Connector & 1 & 0.38 & 0.38\\
+102-6321-ND & DC to DC Converter & 1 & 2.15 & 2.15\\
+P2J4103-ND & Potentiometer & 5 & 1.19 & 5.95\\
+& PCB & 1 & 5.00 & 5.00\\
 \midrule
-Total & & 10 & 10€\\
+Total & & 14 && 20.38\\
 \bottomrule
 \end{tabular}
-  
 \end{table}
 
-\subsection{Opamps}
+My calculations show that the product will cost about 25€ in parts. There is obviously more cost for me, because this does not include shipping. At this time, it also does not include the cost of the case. However, I am happy with that price so far. 
+
+
 
 
 
