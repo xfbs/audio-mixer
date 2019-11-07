@@ -378,11 +378,13 @@ Next, I start my actual design process. I have downloaded and installed the most
 
 \subsection{USB Power Input}
 
-The USB Power Input side was quite straightforward. I used the part
+The USB Power Input side was quite straightforward. I used the part for the USB connector. Since I don't actually do anything USB-related, I don't need to do anything with the data pins. All I do is tap off the V\textsubscript{in}, SHIELD and GND pins, and add a cap between the power rail and ground for filtering.
 
 \begin{center}
   \includegraphics[trim={2cm 5.5cm 21cm 12.8cm},width=8cm,clip]{images/audio-mixer.pdf}
 \end{center}
+
+I might get back to this and add a fuse for protection, although I'm not sure yet if that is really necessary.
 
 \subsection{DC to DC Power}
 
