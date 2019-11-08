@@ -2,6 +2,7 @@
 \usepackage[utf8]{inputenc}
 \usepackage{graphicx,tikz,hyperref,booktabs,lmodern,textcomp,multirow,microtype}
 \usetikzlibrary{shapes,positioning,calc}
+\usepackage[siunitx]{circuitikz}
 
 \title{Audio Mixer}
 \author{Patrick M. Elsen}
@@ -83,6 +84,9 @@ I did a bit of research while coming up with the specifications. I need to use s
   \item KiCAD (\url{http://www.kicad-pcb.org/}) is my tool of choice for PCB design.
   \item SnapEDA (\url{https://www.snapeda.com/}) has part outlines and models for KiCAD and is free to use.
   \item SeeedStudio (\url{https://www.seeedstudio.com/}) offers PCB manufacture, assembly, and parts that I might use.
+  \item JLC PCB (\url{https://jlcpcb.com/}) offers afforcable PCB manufacturing.
+  \item DigiKey has a large stock of electronic compounds.
+  \item LCSC (\url{https://lcsc.com}) has a lot of low-cost components that can be shipped from china. Because it is based in asia, shipping takes a long time.
 \end{enumerate}
 
 It is important that I find good connectors and potentiometers that will last a while. For the case, I will find ideas after I have designed the PCB, since it is easy to 3D-print a case.
@@ -200,6 +204,17 @@ The second Opamp I found was one that is marked as being an amplifier specifical
 I also took a look at another operational amplifier with more channels. With the 2-channel opamps, I would need 5 ICs in total, which is maybe a bit much. Buying bigger packages means I can reduce the part count. This one is also suited to audio applications. However, it is more expensive than the LM833DT.
 
 The main takeaway from the opamps is that I probably need a negative voltage rail. Ideally, I want something like a -12V and a +12V rail to give me a lot of headroom for the audio.
+
+\begin{partdisplay}{soic8}
+& Digikey Part & 296-13622-1-ND\\
+& Manufacturer & Texas Instruments\\
+& Manufacturer Part & NE5532DR\\
+& Opamps & 4\\
+& Price (1) & 0.77€\\
+& Price (10) & 0.63€\\  
+\end{partdisplay}
+
+This last one I have added in the design phase as this was one that I was doing tests with. I happened to have some on hand, and it sounds very good. Although likely too expensive for the budget.
 
 \subsection{Power Connector}
 
@@ -431,10 +446,182 @@ The sample circuits are a little confusing, but I just implemented both of them 
 
 This is the result that I came up with. Note that the first capacitor, C1 in Figure \ref{fig:pdme-emc}, is not visible -- this can be seen on the USB Power Input side of things. I have labelled the two new power rails +12V and -12V, to differentiate from the existing V\textsubscript{cc} and GND rails.
 
-\subsection{Audio Volume Adjustment}
-
 \subsection{Audio Mixing}
 
+For the actual money maker of this circuit, I had to do a bit more research. My idea is to use a setup something like this. For every individual mono channel on the input side.
+
+\begin{center}
+\begin{circuitikz}
+\draw
+  (0,0) node[anchor=east] {Input} 
+    to ++(1,0) 
+    to[potentiometer, name=pot] ++(0,-2)
+    node[ground]{}
+  (pot.wiper) to[highpass, name=hpf] ++(2,0) to ++(1,0)
+    node[op amp, name=opamp,anchor=+]{}
+  (opamp.-) -- ++(0,1) -- ++(2.4,0) to[short, -*] ++(0,-1.5)
+  (opamp.out) -- ++(1,0) node[anchor=west] {Output}; 
+\end{circuitikz}
+\end{center}
+
+With this, I would use the potentiometer directly at the input side of things to attenuate the signal, and then feed it though a highpass filter in order to remove any DC bias. The highpass filter should be setup to give me a -6dB attenuation at 10Hz (this is something I read online, and it makes sense to me). The opamp here is setup as a non-inverting follower. 
+
+For the actual audio mixing, I would then use a summing amplifier circuit, something like this.
+
+\begin{center}
+\begin{circuitikz}
+\draw
+  (0,0) node[anchor=east] {Input 1} 
+    to ++(1,0) 
+    to[resistor, name=R1] ++(1,0)
+    to ++(1,0)
+  (0,-1) node[anchor=east] {Input 2}
+    to ++(1,0)
+    to[resistor, name=R2] ++(1,0)
+    to ++(1,0)
+  (0,-2) node[anchor=east] {Input 3}
+    to ++(1,0)
+    to[resistor, name=R3] ++(1,0)
+    to ++(1,0)
+  (0,-3) node[anchor=east] {Input 4}
+    to ++(1,0)
+    to[resistor, name=R4] ++(1,0)
+    to[short, -*] ++(1,0)
+    to[short, -*] ++(0,1)
+    to[short, -*] ++(0,1)
+    to[short, -*] ++(0,1)
+  (R2.right) to ++(2,0)
+    to[potentiometer, name=pot] ++(0,-2)
+    node[ground] {}
+  (pot.wiper) to ++(1,0)
+    node[op amp, name=opamp,anchor=+]{}
+  (opamp.-) -- ++(0,1) -- ++(2.4,0) to[short, -*] ++(0,-1.5)
+  (opamp.out) -- ++(1,0) node[anchor=west] {Output}; 
+\end{circuitikz}
+\end{center}
+
+The idea here is that all inputs get summed up using resistors, and then I would use a potentiometer to attenuate the sum again, before sending it into the last opamp. I have drawn the opamp here with unity gain, however I would likely use a small gain to compensate for the losses in the circuit. This is my (uninformed) idea. In order to see how this kind of circuit would be setup, I went out to look for some example audio mixing circuits to study.
+
+\subsubsection{Circuitlib Summing Amplifier}
+
+While doing research, I stumbled upon a tutorial on circuitlib\footnote{\url{https://www.circuitlib.com/index.php/tutorials/product/39-how-to-build-an-audio-mixer}} that is built on the LM833 opamp, and has a similar setup to mine. 
+
+\begin{center}
+  \includegraphics[width=5cm]{images/fig2_audio_mixer}  
+\end{center}
+
+The author uses a block-based setup, where the individual stereo channels are first processed and then all fed into a summing amplifier, much like I want to do.  This type of setup has the advantage that it is modular, meaning that it can easily be changed or extended, and it is testable, meaning that I can test the stages individually to make sure they sound good.
+
+\begin{center}
+  \includegraphics[width=7cm]{images/f3_audio_mixer}
+\end{center}
+
+The circuit the author uses for the input stage seems to make sense to me. It uses the opamps, and some circuitry to filter high-frequency noise above 120kHz, this seems like it would be desireable. I don't yet see if this would also do DC rejection, but I will find out. So far, I like this design, it does not seem overly complicated.
+
+\subsubsection{All About Circuits Summing Amplifier}
+
+I also found an example circuit on All About Circuits\footnote{\url{https://www.allaboutcircuits.com/projects/build-an-audio-mixer/}}. This one is also rather similar to mine.
+
+\begin{center}
+  \includegraphics[width=8cm]{images/Audio-Mixer_8-5-2015}
+\end{center}
+
+What I like about this design is that it seems very simple, and what I like especially is that the author demonstrates some kind of simulation. I definitely would like to simulate and try out any potential designs before I build them. I am not sure what kind of software he uses for that simulation, but I will find out. 
+
+What I dislike about this design is that he has not actually produced it, as far as I can tell, meaning that it is not clear if this works well in the real world.
+
+\subsubsection{Experiments with LM358 and NE5532}
+
+I created a simple experimental test setup, whereby I took music output from my iPhone, and fed it into a little circuit using an opamp. It included a simple potentiometer for voltage attenuation and an opamp set up as a unity gain amplifier (voltage follower). 
+
+\begin{center}
+\includegraphics[width=7cm]{images/IMG_7757}  
+\end{center}
+
+
+I noticed a few things. First, there is noticeable hum when the opamp input is not connect to anything. This is mitigated by the potentiometer which will clamp it down to ground without an input. This is however also an issue with a long cable connected, which picks up interference. I don't know if there is some kind of circuit that might help here.
+
+The other thing I noticed is that there is a (dramatic) difference in the sound produced by these two opamps! Without changing anything in the circuit, the NE5532 sounds good -- very crisp and clear. The LM358 however sounds very miserable. There must be some characteristic that it is lacking.
+
+So far, I am satisfied with this simple experiment. It works better than I had expected. I am actually thinking of changing the circuit a bit now. If I reduce the impedance to something like 1kO, would that maybe reduce the humming noice perceived?
+
+Reducing the impedance down to 680 Ohms noticeably reduces the hum. I am happy with that result, hum should not be present in the input anywhere. I also did some research to find out how much these NE5532 opamps actually cost -- unfortunately, they are priced rather prohibitively, so I will likely not be using them in the product. It is however good to know that there is a difference in performance between different kinds, and I will make sure to test the ones I am looking to use. I found some\footnote{\url{http://nwavguy.blogspot.com/2011/08/op-amp-measurements.html}} discussions\footnote{\url{https://www.stereo.net.au/forums/topic/69927-the-lm833/}} about different kinds of opamps.
+
+I used a website to calculate a value for a high-pass filter. I want to do DC rejection, and that is best done with a high-pass filter. For this, I can put a capacitor in line, the size of this depending on the impedance of the input (the size of the resistor). Using the tool, I found that with a 680 Ohme resistor, values of around 20µF or 10µF are good, these will reject anything below around 10 or 20Hz.
+
+Next, I also considered using a low-pass filter to filter out high frequencies beyond the audible range.
+
+\begin{center}
+\ctikzset{label/align = smart}
+\begin{circuitikz}[scale=0.7,every node/.style={scale=0.7}]
+\draw
+  (0,0) node[anchor=east] {Input}
+  to[short,-o] ++(0,0)
+  to[C,l=$C_1$,a=3.3<\micro\farad>,name=c1] ++(3,0)
+  to[short,-*,name=x1] ++(0,0)
+  to[R,l_=$R_1$,a^=680<\ohm>,name=r1] ++(0,-3)
+  node[ground]{}
+  (x1) to[R,l=$R_2$,a=1<\kilo\ohm>,name=r2] ++(3,0)
+  to[short,-*] ++(0,0)
+  to[short,-*,name=x2] ++(0,0)
+  to[C,l_=$C_2$,a^=64<\nano\farad>,name=c2] ++(0,-3)
+  node[ground]{}
+  (x2) to ++(3,0)
+  to[potentiometer, name=r3] ++(0, -3)
+  node[ground]{}
+  (r3.south) node[anchor=east,align=right,text width=1cm]{$R_3$\\\SI{10}{\kilo\ohm}}
+  (r3.wiper) to ++(1,0)
+  node[name=i1,op amp=$I_1$,anchor=+,yscale=-1]{}
+  (i1.center) node{$I_1$}
+  (i1.-) to ++(0,-1)
+  to[R,l=$R_1$,a=1<\kilo\ohm>] ++(2.4,0)
+  to[short,-*] ++(0,1.5)
+  to[short,-o] ++(1,0)
+  node[anchor=west] {Output};
+\end{circuitikz}
+\end{center}
+
+The only issue with this circuit is that I read online that a line input should have an impedance of about \SI{10}{\kilo\ohm}. With this setup that I have here, that is not really the case. I am not sure how big of an issue this is, since a line output should probably be able to drive that. Also, it reduces susceptibility to interference from the cables.
+
+After having done this experiment, I now understand more of how the circuit from circuitlib works. With that knowledge, and fixing the issue with the input impedance, I came up with this circuit.
+
+\begin{center}
+%\footnotesize
+%\small
+\ctikzset{label/align = smart}
+\begin{circuitikz}[scale=0.7,every node/.style={scale=0.7}]
+\draw
+  (0,0) node[anchor=east] {Input}
+  to[short,-o] ++(0,0)
+  to[C,l=$C_1$,a=1<\micro\farad>,name=c1] ++(3,0)
+  to[potentiometer,name=r1] ++(0,-3)
+  to ++(0,-0.5)
+  node[ground]{}
+  (r1.south) node[anchor=east,align=right,text width=1cm]{$R_1$\\\SI{10}{\kilo\ohm}}
+  (r1.wiper)
+%  to[R,l=$R_2$,a=1<\kilo\ohm>,name=r2] ++(3,0)
+%  to[short,-*] ++(0,0)
+%  to[short,-*,name=x2] ++(0,0)
+%  to[C,l_=$C_2$,a^=64<\nano\farad>,name=c2] ++(0,-3)
+%  node[ground]{}
+%  (x2)
+  to[R,name=r2,l=$R_2$,a=100<\kilo\ohm>] ++(3,0)
+  to[short,name=x1,-*] ++(0,0)
+  to ++(0,-1)
+  to[C,l_=$C_2$,a^=50<\pico\farad>] ++(0,-1)
+  node[ground]{}
+  (x1) to ++(2,0)
+  node[name=i1,op amp=$I_1$,anchor=+,yscale=-1]{}
+  (i1.center) node{$I_1$}
+  (i1.-) to ++(0,-1)
+  to ++(2.4,0)
+  to[short,-*] ++(0,1.5)
+  to[short,-o] ++(1,0)
+  node[anchor=west] {Output};
+\end{circuitikz}
+\end{center}
+
+This circuit is more minimal and offers DC rejection. According to calculation and simulation, it has a \SI{3}{\decibel} loss at around \SI{10}{\hertz}. It also has a low-pass filter with a cutoff at around \SI{30}{\kilo\hertz}. Both of these filters are adjusted with the values of $C_1$ and $C_2$. The cutoff frequency also depends on the position of the volume potentiometer, but it only varies negligible amount.
 
 \section{Bill of Materials}
 
