@@ -772,7 +772,17 @@ Next, I arranged the parts on the PCB in a way that makes sense. The RCA jacks a
   \includegraphics[trim={11cm 5cm 12cm 5cm},clip,width=6cm]{images/pcb.pdf}
 \end{center}
 
-I was still missing some outlines and some parts. 
+As discussed in the design section, I have two outputs. However, I was unable to make two RCA outputs fit on the board, there simply isn't enough space. I even tried using the 3D model of the connector to see how much I can squeeze them together. To do this, I downloaded the STL file of the 3D model from the manufacturer website, and wrote a little OpenSCAD script to place them next to each other, and I tried different offsets until I found the one that would fit without any clashes. But even in squeezing them together, there simply wasn't enough space.
+
+\begin{center}
+\includegraphics[width=6cm,trim={7cm 6cm 7cm 7cm},clip]{models/model}  
+\end{center}
+
+To fix this, I made a design change to change one of the output RCA jacks into a 3.5mm headphone jack.
+
+
+
+
 
 
 \end{document}
