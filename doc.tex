@@ -401,7 +401,7 @@ The USB Power Input side was quite straightforward. I used the part for the USB 
 
 I might get back to this and add a fuse for protection, although I'm not sure yet if that is really necessary.
 
-\subsection{Audio Input and Output}
+\subsection{Audio Jacks}
 
 For the audio inputs (RCA Jacks), I simply added all eight (four stereo channels) of them. I attached their ground to the common ground, and created labels for every one of them.
 
@@ -446,7 +446,7 @@ The sample circuits are a little confusing, but I just implemented both of them 
 
 This is the result that I came up with. Note that the first capacitor, C1 in Figure \ref{fig:pdme-emc}, is not visible -- this can be seen on the USB Power Input side of things. I have labelled the two new power rails +12V and -12V, to differentiate from the existing V\textsubscript{cc} and GND rails.
 
-\subsection{Audio Mixing}
+\subsection{Audio Input Filtering}
 
 For the actual money maker of this circuit, I had to do a bit more research. My idea is to use a setup something like this. For every individual mono channel on the input side.
 
@@ -465,42 +465,6 @@ For the actual money maker of this circuit, I had to do a bit more research. My 
 \end{center}
 
 With this, I would use the potentiometer directly at the input side of things to attenuate the signal, and then feed it though a highpass filter in order to remove any DC bias. The highpass filter should be setup to give me a -6dB attenuation at 10Hz (this is something I read online, and it makes sense to me). The opamp here is setup as a non-inverting follower. 
-
-For the actual audio mixing, I would then use a summing amplifier circuit, something like this.
-
-\begin{center}
-\begin{circuitikz}
-\draw
-  (0,0) node[anchor=east] {Input 1} 
-    to ++(1,0) 
-    to[resistor, name=R1] ++(1,0)
-    to ++(1,0)
-  (0,-1) node[anchor=east] {Input 2}
-    to ++(1,0)
-    to[resistor, name=R2] ++(1,0)
-    to ++(1,0)
-  (0,-2) node[anchor=east] {Input 3}
-    to ++(1,0)
-    to[resistor, name=R3] ++(1,0)
-    to ++(1,0)
-  (0,-3) node[anchor=east] {Input 4}
-    to ++(1,0)
-    to[resistor, name=R4] ++(1,0)
-    to[short, -*] ++(1,0)
-    to[short, -*] ++(0,1)
-    to[short, -*] ++(0,1)
-    to[short, -*] ++(0,1)
-  (R2.right) to ++(2,0)
-    to[potentiometer, name=pot] ++(0,-2)
-    node[ground] {}
-  (pot.wiper) to ++(1,0)
-    node[op amp, name=opamp,anchor=+]{}
-  (opamp.-) -- ++(0,1) -- ++(2.4,0) to[short, -*] ++(0,-1.5)
-  (opamp.out) -- ++(1,0) node[anchor=west] {Output}; 
-\end{circuitikz}
-\end{center}
-
-The idea here is that all inputs get summed up using resistors, and then I would use a potentiometer to attenuate the sum again, before sending it into the last opamp. I have drawn the opamp here with unity gain, however I would likely use a small gain to compensate for the losses in the circuit. This is my (uninformed) idea. In order to see how this kind of circuit would be setup, I went out to look for some example audio mixing circuits to study.
 
 \subsubsection{Circuitlib Summing Amplifier}
 
@@ -586,8 +550,6 @@ The only issue with this circuit is that I read online that a line input should 
 After having done this experiment, I now understand more of how the circuit from circuitlib works. With that knowledge, and fixing the issue with the input impedance, I came up with this circuit.
 
 \begin{center}
-%\footnotesize
-%\small
 \ctikzset{label/align = smart}
 \begin{circuitikz}[scale=0.7,every node/.style={scale=0.7}]
 \draw
@@ -599,12 +561,6 @@ After having done this experiment, I now understand more of how the circuit from
   node[ground]{}
   (r1.south) node[anchor=east,align=right,text width=1cm]{$R_1$\\\SI{10}{\kilo\ohm}}
   (r1.wiper)
-%  to[R,l=$R_2$,a=1<\kilo\ohm>,name=r2] ++(3,0)
-%  to[short,-*] ++(0,0)
-%  to[short,-*,name=x2] ++(0,0)
-%  to[C,l_=$C_2$,a^=64<\nano\farad>,name=c2] ++(0,-3)
-%  node[ground]{}
-%  (x2)
   to[R,name=r2,l=$R_2$,a=100<\kilo\ohm>] ++(3,0)
   to[short,name=x1,-*] ++(0,0)
   to ++(0,-1)
@@ -622,6 +578,131 @@ After having done this experiment, I now understand more of how the circuit from
 \end{center}
 
 This circuit is more minimal and offers DC rejection. According to calculation and simulation, it has a \SI{3}{\decibel} loss at around \SI{10}{\hertz}. It also has a low-pass filter with a cutoff at around \SI{30}{\kilo\hertz}. Both of these filters are adjusted with the values of $C_1$ and $C_2$. The cutoff frequency also depends on the position of the volume potentiometer, but it only varies negligible amount.
+
+\subsubsection{Choosing Opamps}
+
+Now that I have bit of a feel for what is required to make a circuit, I have to choose which opamps I want to use in my product. I have already established that some opamps are not very suitable, such as the LM358. I would also like to use quad opamps in order to reduce BOM count.
+
+One positive thing is that opamps seem to have more or less standardised pinouts. This means that I can design my circuit without knowing which specific opamp I will use, and I am able to change to using another type because their footprints will be compatible.
+
+\begin{center}
+\includegraphics[height=3cm,page=2,trim={11.6cm 19.8cm 5cm 3.2cm},clip]{datasheets/MC33272A-D.PDF}
+\includegraphics[height=3cm,page=3,trim={3cm 11.4cm 12.2cm 11.9cm},clip]{datasheets/tl064.pdf}
+\includegraphics[height=3cm,page=4,trim={7cm 18cm 7cm 2.8cm},clip]{datasheets/opa1679.pdf}
+\end{center}
+
+Taking price and specifications into consideration, I think the MC33272 is probably the ideal candidate. The specifications are good. I have not tried it yet, however.
+
+\subsection{Audio Mixing}
+
+Now that I figured out how to perform the audio input filtering, I have to actually mix the audio. The simplest way this can be achieved is with just a few simple resistors. The value of these needs to be chosen such that they provide proper impedance. My first idea was something like this.
+
+\begin{center}
+\begin{circuitikz}[scale=0.7,every node/.style={scale=0.7}]
+\draw
+  (0,0) node[anchor=east] {Input 1} 
+    to[short,-o] ++(0,0)
+    to ++(1,0) 
+    to[resistor, name=R1, l=$R_1$] ++(1,0)
+    to ++(1,0)
+  (0,-1) node[anchor=east] {Input 2}
+    to[short,-o] ++(0,0)
+    to ++(1,0)
+    to[resistor, name=R2, l=$R_2$] ++(1,0)
+    to ++(1,0)
+  (0,-2) node[anchor=east] {Input 3}
+    to[short,-o] ++(0,0)
+    to ++(1,0)
+    to[resistor, name=R3, l=$R_3$] ++(1,0)
+    to ++(1,0)
+  (0,-3) node[anchor=east] {Input 4}
+    to[short,-o] ++(0,0)
+    to ++(1,0)
+    to[resistor, name=R4, l=$R_4$] ++(1,0)
+    to[short, -*] ++(1,0)
+    to[short, -*] ++(0,1)
+    to[short, -*] ++(0,1)
+    to[short, -*] ++(0,1)
+  (R1.right) to ++(2,0)
+    to[potentiometer, name=pot, l_=$R_5$] ++(0,-2)
+    node[ground] {}
+  (pot.wiper) to ++(1,0)
+    node[op amp, name=opamp,anchor=+,yscale=-1]{}
+  (opamp.-) to ++(0,-1.5) 
+    to[short,-*] ++(2.39,0)
+  (opamp.out)
+    to[R,l=$R_6$] ++(0,-2)
+    to[R,l=$R_7$] ++(0,-2)
+    node[ground]{}
+  (opamp.out) to[short,-o] ++(1,0) node[anchor=west] {Output};
+\end{circuitikz}
+\end{center}
+
+The idea here is that all inputs get summed up using resistors, and then I would use a potentiometer to attenuate the sum again, before sending it into the last opamp. This time, I don't want to set the op amp up with unity gain, I rather want it to compensate for the losses of the resistor divider. $R_6$ and $R_7$ should be set up such that a signal passed in on one of the inputs, with the other inputs connected to ground, should come out with the same level as it came in.
+
+My original plan was to use $R_1 = R_2 = R_3 = R_4 = \SI{1}{\kilo\ohm}$ and $R_5 = \SI{10}{\kilo\ohm}$ for the potentiometer. However, calculations show that this causes an unacceptable power draw of \SI{6}{\milli\ampere} when two of the inputs are clamped to \SI{5}{\volt} and the other two to ground. This would be a peak current, but with a power budget of only \SI{40}{\milli\ampere}, it won't fly.
+
+I have a few options here. I could use \SI{10}{\kilo\ohm} for the resistors, which would reduce the signal, meaning that I would have to compensate by increasing the amplification, or I could also change the potentiometer to a \SI{100}{\kilo\ohm} one. The issue with changing the pot is that it is a rather expensive part, and by having two different kinds, I can profit less from buying in bulk.
+
+I decided to use $R_1 = R_2 = R_3 = R_4 = \SI{10}{\kilo\ohm}$ for the resistors, $R_5 = \SI{10}{\kilo\ohm}$ for the potentiometer, and $R_6 = \SI{10}{\kilo\ohm}$ and $R_7 = \SI{2.4}{\kilo\ohm}$ for the gain control resistor divider. With these values, losses from the resistors should be less than \SI{1}{\milli\ampere} with two inputs clamped to \SI{5}{\volt} and the others clamped to ground.
+
+Since this circuit is simpler than I had anticipated, it would be possible to include it twice, for two separate outputs. This could potentially provide a headphone port. That would be possible without increasing the part count by adding a second potentiometer at the resistor adder, and changing the value of one of the gain control resistors.
+
+\begin{center}
+\begin{circuitikz}[scale=0.7,every node/.style={scale=0.7}]
+\draw
+  (0,0) node[anchor=east] {Input 1} 
+    to[short,-o] ++(0,0)
+    to ++(1,0) 
+    to[resistor, name=R1, l=$R_1$] ++(1,0)
+    to ++(1,0)
+  (0,-1) node[anchor=east] {Input 2}
+    to[short,-o] ++(0,0)
+    to ++(1,0)
+    to[resistor, name=R2, l=$R_2$] ++(1,0)
+    to ++(1,0)
+  (0,-2) node[anchor=east] {Input 3}
+    to[short,-o] ++(0,0)
+    to ++(1,0)
+    to[resistor, name=R3, l=$R_3$] ++(1,0)
+    to ++(1,0)
+  (0,-3) node[anchor=east] {Input 4}
+    to[short,-o] ++(0,0)
+    to ++(1,0)
+    to[resistor, name=R4, l=$R_4$] ++(1,0)
+    to[short, -*] ++(1,0)
+    to[short, -*] ++(0,1)
+    to[short, -*] ++(0,1)
+    to[short, -*] ++(0,1)
+    to[short] ++(0,-3)
+    to[short] ++(1.06,0)
+    to[potentiometer, name=R8,l_=$R_8$] ++(0,-3)
+    node[ground]{}
+  (R1.right) to ++(2,0)
+    to[potentiometer, name=R5, l_=$R_5$] ++(0,-2)
+    node[ground] {}
+  (R5.wiper) to ++(1,0)
+    node[op amp, name=I1,anchor=+,yscale=-1]{}
+  (I1.-) to ++(0,-1.5) 
+    to[short,-*] ++(2.39,0)
+  (I1.out)
+    to[R,l=$R_6$] ++(0,-2)
+    to[R,l=$R_7$] ++(2,0)
+    node[ground]{}
+  (I1.out) to[short,-o] ++(1,0) node[anchor=west] {Output 1}
+  (R8.wiper) to ++(1,0)
+    node[op amp, name=I2,anchor=+,yscale=-1]{}
+  (I2.-) to ++(0,-1.5) 
+    to[short,-*] ++(2.39,0)
+  (I2.out)
+    to[R,l=$R_9$] ++(0,-2)
+    to[R,l=$R_{10}$] ++(2,0)
+    node[ground]{}
+  (I2.out) to[short,-o] ++(1,0) node[anchor=west] {Output 2};
+\end{circuitikz}
+\end{center}
+
+With this setup, I have to let $R_6 = R_9 = \SI{10}{\kilo\ohm}$ and $R_7 = R_{10} = \SI{2}{\kilo\ohm}$ in order to compensate for the addition. I have decided to go with this for two reasons. It is more economical and practical to buy quad opamps, so if I use them exclusively (which would be optimal to reduce part count), I would have two spare anyways. It does add some cost for potentiometers and connectors, but I feel like it is worth it.
 
 \section{Bill of Materials}
 
