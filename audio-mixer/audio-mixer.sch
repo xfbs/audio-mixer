@@ -929,13 +929,13 @@ F 3 "~" H 6750 2875 50  0001 C CNN
 	0    1    1    0   
 $EndComp
 Text GLabel 6100 3050 0    50   Input ~ 0
-INPUT2R
+INPUT4R
 Text GLabel 6100 2550 0    50   Input ~ 0
-INPUT2L
+INPUT4L
 Text GLabel 6100 1500 0    50   Input ~ 0
-INPUT1R
+INPUT3R
 Text GLabel 6100 1000 0    50   Input ~ 0
-INPUT1L
+INPUT3L
 $Comp
 L power:GND #PWR031
 U 1 1 5DCBBA2F
@@ -1227,4 +1227,20 @@ F 3 "" H 5800 6900 50  0001 C CNN
 	1    5800 6900
 	1    0    0    -1  
 $EndComp
+Text GLabel 4850 1150 2    50   Input ~ 0
+PROC1L
+Text GLabel 4850 1650 2    50   Input ~ 0
+PROC1R
+Text GLabel 4850 2700 2    50   Input ~ 0
+PROC2L
+Text GLabel 4850 3200 2    50   Input ~ 0
+PROC2R
+Text GLabel 7850 1250 2    50   Input ~ 0
+PROC3L
+Text GLabel 7850 1750 2    50   Input ~ 0
+PROC3R
+Text GLabel 7850 2800 2    50   Input ~ 0
+PROC4L
+Text GLabel 7850 3300 2    50   Input ~ 0
+PROC4R
 $EndSCHEMATC
