@@ -780,7 +780,19 @@ As discussed in the design section, I have two outputs. However, I was unable to
 
 To fix this, I made a design change to change one of the output RCA jacks into a 3.5mm headphone jack.
 
+I also had to make a custom footprint for the potentiometer, and in the process discovered that KiCad is a bit lacking when it comes to cutouts: it is not possible to create them in the GUI. I worked around that by using pins where the cutouts should be, which should also work.
 
+I am also not entirely sure yet about the pins of the potentiometer -- since it is logarithmic, I have to use some specific pins. I have made an educated guess, but I will only know for sure when the parts arrive so that I can do some real-world testing of my circuit.
+
+In the meantime, I was able to produce a nice looking rendering of what the board looks like thus far.
+
+\begin{center}
+\includegraphics[width=8cm,trim={43cm 21cm 45cm 22cm},clip]{images/rendering-2019-11-09}
+\end{center}
+
+The design I chose has a number of quirks. In order to maximise efficiency, I have stuff on both sides of the PCB. One side has almost all the parts, including the RCA connectors, ICs, and so on. The other side has all of the potentiometers. 
+
+To keep the design simple, I try to do as much on the first layer as possible, and use the second layer only as a ground plane and layer for vias where paths cross. I'm not very experienced in PCB layout and routing, and I am struggling with KiCad a bit to get things to work the way I want them to, but it should be okay. Despite being a little bit crammed, this circuit is actually very simple to layout and route.
 
 \section{Orders}
 
