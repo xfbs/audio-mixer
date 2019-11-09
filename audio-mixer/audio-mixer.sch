@@ -1583,9 +1583,9 @@ F 3 "" H 9500 1300 50  0001 C CNN
 	1    9500 1300
 	1    0    0    -1  
 $EndComp
-Text GLabel 9650 1050 2    50   Input ~ 0
-OUTPUT2L
 Text GLabel 9650 1200 2    50   Input ~ 0
+OUTPUT2L
+Text GLabel 9650 1050 2    50   Input ~ 0
 OUTPUT2R
 $Comp
 L RCJ-2234:RCJ-2234 J3
