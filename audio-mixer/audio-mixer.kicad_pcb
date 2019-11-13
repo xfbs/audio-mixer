@@ -2,7 +2,7 @@
 
   (general
     (thickness 1.6)
-    (drawings 9)
+    (drawings 10)
     (tracks 450)
     (zones 0)
     (modules 65)
@@ -11,8 +11,8 @@
 
   (page A4)
   (layers
-    (0 F.Cu signal)
-    (31 B.Cu signal)
+    (0 F.Cu signal hide)
+    (31 B.Cu signal hide)
     (32 B.Adhes user)
     (33 F.Adhes user)
     (34 B.Paste user)
@@ -85,11 +85,11 @@
       (plotinvisibletext false)
       (padsonsilk false)
       (subtractmaskfromsilk false)
-      (outputformat 4)
+      (outputformat 1)
       (mirror false)
       (drillshape 0)
       (scaleselection 1)
-      (outputdirectory "."))
+      (outputdirectory "../export/v1"))
   )
 
   (net 0 "")
@@ -3167,11 +3167,14 @@
       (net 1 GND))
   )
 
+  (gr_text "#JLCJLCJLCJLC" (at 131.5 73.25 270) (layer F.SilkS)
+    (effects (font (size 1 1) (thickness 0.15)))
+  )
   (gr_text github.com/xfbs/audio-mixer (at 131.5 31 270) (layer F.SilkS)
     (effects (font (size 1 1) (thickness 0.15)))
   )
-  (gr_text v1rev1 (at 131.5 66.5 270) (layer B.SilkS)
-    (effects (font (size 1 1) (thickness 0.15)) (justify mirror))
+  (gr_text v1-2019-11-13 (at 131.5 54.5 270) (layer F.SilkS)
+    (effects (font (size 1 1) (thickness 0.15)))
   )
   (gr_text github.com/xfbs/audio-mixer (at 131.5 83 270) (layer B.SilkS)
     (effects (font (size 1 1) (thickness 0.15)) (justify mirror))
@@ -3656,7 +3659,7 @@
   (segment (start 98.96 100.96) (end 99.5 101.5) (width 0.3) (layer F.Cu) (net 62))
   (segment (start 98.96 99.475) (end 98.96 100.96) (width 0.3) (layer F.Cu) (net 62))
 
-  (zone (net 1) (net_name GND) (layer B.Cu) (tstamp 5DCD556F) (hatch edge 0.508)
+  (zone (net 1) (net_name GND) (layer B.Cu) (tstamp 5DCD5E66) (hatch edge 0.508)
     (connect_pads (clearance 0.508))
     (min_thickness 0.254)
     (fill yes (arc_segments 32) (thermal_gap 0.508) (thermal_bridge_width 0.508) (smoothing chamfer) (radius 1))
