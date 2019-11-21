@@ -828,6 +828,30 @@ Similarly, I went through every component on the board, verifying that it is pla
 
 This is something I need to fix in the next revision. The physical inputs, outputs and knobs should ideally line up. In the next revision, I might also change the position of the USB power input.
 
+\subsection{First Prototype Manufacture}
+
+As I was expecting, there were some issues in the first prototype already. Thankfully, the issues were minor enough that I was able to actually assemble a prototype that was more or less working, to verify that the circuit generally works. Most of the issues had to do with part footprints being incorrect.
+
+For the \SI{3.5}{\milli\meter} audio jack, there were holes drilled for little plastic spacers, however these are intended to be spacers from the PCB and do not require holes to be drilled.
+
+The large four-channel stereo input RCA jack connector had bad incorrect holes cutout for the plastic tabs. The holes were far too small, which I was able to mitigate by cutting off the plastic tabs to get a working prototype.
+
+The potentiometers had holes for the metal tabs that were just slightly too small. They had to be bent slightly to be made to work and fit. 
+
+The two \SI{5}{\volt} input rail capacitors had incorrect markings on the PCB (polarity reversed). The marking on the caps denotes the negative polarity. This error was made because I did not use polar caps in the schematic.
+
+I was unable to correctly put together the end stages because I did not have \SI{50}{\kilo\ohm} resistors at hand. I was able to mitigate by using \SI{100}{\kilo\ohm} resistors instead, slightly increasing the attenuation. 
+
+The most severe issue, however, was that the pins of the potentiometer were assigned wrong. One of the channels is flipped, such that the left channel is at max when turning them all the way down, and the right channel is at max when turning them all the way up. I had apparently made an error when measuring the channels.
+
+% https://forum.kicad.info/t/create-a-mounting-hole/6737
+
+Another thing I noticed is that it would make sense to add holes on the corners of the PCB, this makes mounting easier. It seems like an M3 size mounting hole is ideal.
+
+
+
+\section{Fabrication}
+
 \section{Orders}
 
 \subsection{2019-11-09}
