@@ -836,15 +836,36 @@ As I was expecting, there were some issues in the first prototype already. Thank
 
 For the \SI{3.5}{\milli\meter} audio jack, there were holes drilled for little plastic spacers, however these are intended to be spacers from the PCB and do not require holes to be drilled.
 
+% FIXME: insert picture of drilled holes
+
+I fixed this by opening up the part, and changing it to remove the holes. Instead, I put little circles on the user information layer to indicate the position of them.
+
+\begin{center}
+\includegraphics[height=3cm,trim={13.7cm 9.7cm 13cm 9.7cm},clip]{images/headphone-jack-bad.pdf}
+\includegraphics[height=3cm,trim={14.5cm 9.7cm 13.7cm 9.7cm},clip]{images/headphone-jack-fixed.pdf}
+\end{center}
+
+While at it, I decided to also add more holes in order to accomodate other headphone jacks -- there is another style that has five pins instead of three, where the other two pins act as a switch that is activated upon insertion of the plug. I don't need this feature, but it is useful to be able to support both styles.
+
+% TODO: add pad, add picture
+
 The large four-channel stereo input RCA jack connector had bad incorrect holes cutout for the plastic tabs. The holes were far too small, which I was able to mitigate by cutting off the plastic tabs to get a working prototype.
 
+% TODO: fix footprint, add picture.
+
 The potentiometers have a detent in the center of their output. This is not really desireable, unless I use that for something (such as making that the unamplified level).
+
+I think that the logarithmic taper is inverted for the two channels, such that this pot can be used for balancing. That is definitely \emph{not} what I want. Thus, I looked for alternatives, and found a pot that might do what I want, and has the additional advantage of being cheaper.
+
+% TODO: show alternative pot
 
 % switch to using cheaper https://www.mouser.de/ProductDetail/ALPS/RK12L12C0A0G?qs=sGAEpiMZZMtC25l1F4XBU%2FgM1eD5hBFTeDAcQkh0Ztk%3D
 
 The potentiometers had holes for the metal tabs that were just slightly too small. They had to be bent slightly to be made to work and fit. 
 
-The two \SI{5}{\volt} input rail capacitors had incorrect markings on the PCB (polarity reversed). The marking on the caps denotes the negative polarity. This error was made because I did not use polar caps in the schematic.
+I fixed this by increasing the drill size, such that they would fit better.
+
+The two \SI{5}{\volt} input rail capacitors had incorrect markings on the PCB (polarity reversed). The marking on the caps denotes the negative polarity. This error was made because I did not use polar caps in the schematic where I should have, and the footprints were wrong (at least I think they were). To remedy this, I switched to another style of footprint that is in the KiCad default library.
 
 I was unable to correctly put together the end stages because I did not have \SI{50}{\kilo\ohm} resistors at hand. I was able to mitigate by using \SI{100}{\kilo\ohm} resistors instead, slightly increasing the attenuation. 
 
@@ -852,7 +873,7 @@ The most severe issue, however, was that the pins of the potentiometer were assi
 
 % https://forum.kicad.info/t/create-a-mounting-hole/6737
 
-Another thing I noticed is that it would make sense to add holes on the corners of the PCB, this makes mounting easier. It seems like an M3 size mounting hole is ideal.
+Another thing I noticed is that it would make sense to add holes on the corners of the PCB, this makes mounting easier. It seems like an M3 size mounting hole is ideal. I did this by using the M3 mounting hole provided in the KiCad library. I had some issues squeezing them on the PCB, but managed to do so by moving some components around slightly.
 
 \section{Fabrication}
 
@@ -948,5 +969,17 @@ I've set my limit for the budget of this project to something like 500\,€, whi
 \end{table}
 
 Today I ordered the PCB samples of the first build. This is exciting.
+
+\section{Conclusion}
+
+I learned a lot of things in this project. It is very easy to design simple analog audio circuits using building blocks like opamps, and by following the datasheet recommendations for rail filtering capacitors. 
+
+Because KiCad is open source software, it has a few rough edges where commercial software is maybe more polished. The biggest issue I found was that some of the footprints had errors in them, which I had to correct manually. 
+
+This is not a huge deal, because I found that it was generally not that difficult to fix footprints or even make custom ones. This is better than using ones from the internet, because making them custom means that you can make sure all the measurements and hole sizes are exactly correct.
+
+Using services like JLCPCB and Digikey, it is easy to order parts even in low quantities and have a PCB manufactured for testing. I was very surprised at the low cost of the bare PCBs.
+
+For the components, sourcing is not always easy. It is difficult to find parts that are affordable, available in small quantities, and that do exactly what is needed. Also, sometimes parts have missing or incomplete documentation, which can lead to design errors (like for the potentiometers, which did not document the position of their tapers to my satisfaction). For these types of issues, prototypes are vital to check if things work together as expected.
 
 \end{document}
