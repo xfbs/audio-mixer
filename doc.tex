@@ -1,6 +1,7 @@
 \documentclass[a4paper]{article}
 \usepackage[utf8]{inputenc}
 \usepackage{graphicx,tikz,hyperref,booktabs,lmodern,textcomp,multirow,microtype,floatpag}
+\usepackage[nomessages]{fp}
 \usetikzlibrary{shapes,positioning,calc}
 \usepackage[siunitx]{circuitikz}
 
@@ -834,6 +835,8 @@ As I was expecting, there were some issues in the first prototype already. Thank
 
 % https://sound-au.com/articles/capacitors.htm
 
+\subsubsection{Audio Jack Holes}
+
 For the \SI{3.5}{\milli\meter} audio jack, there were holes drilled for little plastic spacers, however these are intended to be spacers from the PCB and do not require holes to be drilled.
 
 % FIXME: insert picture of drilled holes
@@ -849,9 +852,13 @@ While at it, I decided to also add more holes in order to accomodate other headp
 
 % TODO: add pad, add picture
 
+\subsubsection{RCA Jack Mounting Holes}
+
 The large four-channel stereo input RCA jack connector had bad incorrect holes cutout for the plastic tabs. The holes were far too small, which I was able to mitigate by cutting off the plastic tabs to get a working prototype.
 
 % TODO: fix footprint, add picture.
+
+\subsubsection{Volume Attenuation Potentiometers}
 
 The potentiometers have a detent in the center of their output. This is not really desireable, unless I use that for something (such as making that the unamplified level).
 
@@ -865,7 +872,11 @@ The potentiometers had holes for the metal tabs that were just slightly too smal
 
 I fixed this by increasing the drill size, such that they would fit better.
 
+\subsubsection{Capacitor markings}
+
 The two \SI{5}{\volt} input rail capacitors had incorrect markings on the PCB (polarity reversed). The marking on the caps denotes the negative polarity. This error was made because I did not use polar caps in the schematic where I should have, and the footprints were wrong (at least I think they were). To remedy this, I switched to another style of footprint that is in the KiCad default library.
+
+\subsubsection{Resistors missing}
 
 I was unable to correctly put together the end stages because I did not have \SI{50}{\kilo\ohm} resistors at hand. I was able to mitigate by using \SI{100}{\kilo\ohm} resistors instead, slightly increasing the attenuation. 
 
@@ -873,11 +884,40 @@ The most severe issue, however, was that the pins of the potentiometer were assi
 
 % https://forum.kicad.info/t/create-a-mounting-hole/6737
 
+\subsubsection{PCB Mounting Holes}
+
 Another thing I noticed is that it would make sense to add holes on the corners of the PCB, this makes mounting easier. It seems like an M3 size mounting hole is ideal. I did this by using the M3 mounting hole provided in the KiCad library. I had some issues squeezing them on the PCB, but managed to do so by moving some components around slightly.
 
 \section{Fabrication}
 
 % https://jlcpcb.com/client/index.html#/parts
+
+\subsection{Bill of Materials}
+
+This is an overview of the actual cost of the device.
+
+\begin{center}
+\FPset{\partspricesum}{0}
+\newcommand{\partline}[5]{
+#1&Part&#2&#4&#5&\FPeval{\partprice}{round(#4*#5, 2)}\partprice\FPeval{\partspricesum}{round(\partspricesum + \partprice, 2)}\xdef\partspricesum{\partspricesum}\\
+&Source&#3\\
+\midrule}
+\footnotesize
+\begin{tabular}{@{}llp{5cm}lrr@{}}
+\toprule
+&&&Amount&Price&Total\\
+\midrule
+\partline{J1}{4-channel Stereo RCA Jack}{Digikey}{1}{3.79}
+\partline{J3}{1-channel Stereo RCA Jack}{Digikey}{1}{1.23}
+\partline{J2}{USB Connector}{Digikey}{1}{0.38}
+\partline{J4}{Headphone Jack \SI{3.5}{\milli\meter}}{Digikey}{1}{0.66}
+\partline{RV1--6}{10k Log Potentiometer}{Elpro}{6}{0.32}
+\partline{U1}{DC to DC converter}{Digikey}{1}{1.95}
+\partline{U2-4}{Quad Opamp}{Digikey}{3}{0.69}
+&&&&Sum&\partspricesum\\
+\bottomrule
+\end{tabular}
+\end{center}
 
 \section{Orders}
 
